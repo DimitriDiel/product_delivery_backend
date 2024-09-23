@@ -11,8 +11,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ProductResponseDto {
 
+    private Long id;
     private String title;
     private BigDecimal price;
+    private String quantity;
     private String productCode;
+    private String description;
+    private String photoLink;
 
 }

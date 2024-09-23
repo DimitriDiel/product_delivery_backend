@@ -10,5 +10,5 @@
     </changeSet>
 
     <include file="create-table-product.xml" relativeToChangelogFile="true"/>
-
+    <include file="add-columms-to-product.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
