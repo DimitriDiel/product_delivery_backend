@@ -20,6 +20,7 @@ public class FileController {
 @Autowired
 private FileService fileService;
 
+// http://host:8080/api/files/upload
 @PostMapping("/upload")
 public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file)
 {
@@ -28,6 +29,7 @@ public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file)
         return ResponseEntity.ok(id.toString());
 }
 
+// http://host:8080/api/files/download/{id}
 @GetMapping("/download/{id}")
 public ResponseEntity<Resource> download(@PathVariable("id") String fileId) throws FileNotFoundException
 {
