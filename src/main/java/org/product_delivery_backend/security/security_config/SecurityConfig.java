@@ -5,7 +5,6 @@ import org.product_delivery_backend.security.filter.TokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,9 +36,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/auth/login","/api/auth/refresh").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products", "/api/products/page").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products/{id}").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/products/page").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/cart").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/cart/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/cart").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/cart/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/files/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/files/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/products").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/products").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users").permitAll()
                         .anyRequest().authenticated()
                 );
 

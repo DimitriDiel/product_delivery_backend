@@ -2,7 +2,7 @@ package org.product_delivery_backend.service;
 
 import lombok.Data;
 
-import org.product_delivery_backend.DTO.productDTO.ProductResponseDto;
+import org.product_delivery_backend.dto.productDto.*;
 import org.product_delivery_backend.entity.Product;
 import org.product_delivery_backend.exceptions.NotFoundException;
 import org.product_delivery_backend.mapper.ProductMapper;
@@ -21,20 +21,20 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
-    public List<org.product_delivery_backend.dto.productDTO.AllProductResponseDto> findAllProduct() {
+    public List<AllProductResponseDto> findAllProduct() {
         List<Product> products = productRepository.findAll();
         return products.stream()
                 .map(productMapper::toAllProductResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    public Page<org.product_delivery_backend.dto.productDTO.AllProductResponseDto> findAllProductPage(Pageable pageable) {
+    public Page<AllProductResponseDto> findAllProductPage(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
         return products.map(productMapper::toAllProductResponseDTO);
     }
 
 
-    public ProductResponseDto addProduct(org.product_delivery_backend.dto.productDTO.ProductRequestDto productRequestDto) {
+    public ProductResponseDto addProduct(ProductRequestDto productRequestDto) {
         Product product = productMapper.toProduct(productRequestDto);
         Product savedProduct = productRepository.save(product);
         return productMapper.toProductResponseDTO(savedProduct);
@@ -52,6 +52,13 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("This product does not exist"));
         return productMapper.toProductResponseDTO(product);
     }
+
+    public Product findProductById2(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("This product does not exist"));
+        return product;
+    }
+
+
 
 
 }
