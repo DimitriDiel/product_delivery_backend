@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface FileService {
         UUID store(MultipartFile file);
         Pair<Resource, FileMetadata> load(UUID id);
+        Pair<Resource, FileMetadata> loadByName(String filename);
 }

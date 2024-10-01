@@ -89,4 +89,17 @@ public Pair<Resource, FileMetadata> load(UUID id)
 
         return new Pair<>(resource, meta.get());
 }
+
+@Override
+public Pair<Resource, FileMetadata> loadByName(String filename)
+{
+        FileMetadata meta = repo.findByFileName(filename).orElseThrow();
+        var id = meta.getId();
+        Resource resource = new InputStreamResource(localStoragePool.load(id.toString()));
+
+        if(!resource.exists())
+                throw new RuntimeException("File " + id + " not found");
+
+        return new Pair<>(resource, meta);
+}
 }
