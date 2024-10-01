@@ -102,4 +102,10 @@ public Pair<Resource, FileMetadata> loadByName(String filename)
 
         return new Pair<>(resource, meta);
 }
+
+@Override
+public Optional<FileMetadata> findByFileName(String filename)
+{
+        return repo.findByFileName(filename);
+}
 }

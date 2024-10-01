@@ -68,4 +68,11 @@ public ResponseEntity<Resource> file(@PathVariable("filename") String filename) 
                 .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
                 .body(resource);
 }
+@GetMapping("/find/{filename}")
+public ResponseEntity<FileMetadata> find(@PathVariable("filename") String filename) throws FileNotFoundException
+{
+        FileMetadata got = fileService.findByFileName(filename).orElseThrow();
+
+        return ResponseEntity.ok(got);
+}
 }
