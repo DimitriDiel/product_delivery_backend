@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -107,5 +108,11 @@ public Pair<Resource, FileMetadata> loadByName(String filename)
 public Optional<FileMetadata> findByFileName(String filename)
 {
         return repo.findByFileName(filename);
+}
+
+@Override
+public List<FileMetadata> findAll()
+{
+        return repo.findAll();
 }
 }

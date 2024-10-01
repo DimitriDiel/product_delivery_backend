@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -72,6 +73,13 @@ public ResponseEntity<Resource> file(@PathVariable("filename") String filename) 
 public ResponseEntity<FileMetadata> find(@PathVariable("filename") String filename) throws FileNotFoundException
 {
         FileMetadata got = fileService.findByFileName(filename).orElseThrow();
+
+        return ResponseEntity.ok(got);
+}
+@GetMapping("/findall")
+public ResponseEntity<List<FileMetadata>> all() throws FileNotFoundException
+{
+        List<FileMetadata> got = fileService.findAll();
 
         return ResponseEntity.ok(got);
 }
