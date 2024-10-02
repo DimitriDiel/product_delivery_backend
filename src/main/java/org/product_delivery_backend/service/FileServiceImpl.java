@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -88,5 +89,30 @@ public Pair<Resource, FileMetadata> load(UUID id)
                 throw new RuntimeException("File " + id + " not found");
 
         return new Pair<>(resource, meta.get());
+}
+
+@Override
+public Pair<Resource, FileMetadata> loadByName(String filename)
+{
+        FileMetadata meta = repo.findByFileName(filename).orElseThrow();
+        var id = meta.getId();
+        Resource resource = new InputStreamResource(localStoragePool.load(id.toString()));
+
+        if(!resource.exists())
+                throw new RuntimeException("File " + id + " not found");
+
+        return new Pair<>(resource, meta);
+}
+
+@Override
+public Optional<FileMetadata> findByFileName(String filename)
+{
+        return repo.findByFileName(filename);
+}
+
+@Override
+public List<FileMetadata> findAll()
+{
+        return repo.findAll();
 }
 }

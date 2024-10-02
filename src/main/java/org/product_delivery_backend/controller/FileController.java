@@ -1,5 +1,6 @@
 package org.product_delivery_backend.controller;
 
+import org.product_delivery_backend.common.Pair;
 import org.product_delivery_backend.entity.FileMetadata;
 import org.product_delivery_backend.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -47,5 +49,38 @@ public ResponseEntity<Resource> download(@PathVariable("id") String fileId) thro
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
                 .body(resource);
+}
+//
+// http://host:8080/api/files/file/{filename}
+@GetMapping("/file/{filename}")
+public ResponseEntity<Resource> file(@PathVariable("filename") String filename) throws FileNotFoundException
+{
+        Pair<Resource, FileMetadata> got = fileService.loadByName(filename);
+        Resource resource = got.getFirst();
+        FileMetadata media = got.getSecond();
+
+        HttpHeaders headers = new HttpHeaders();
+
+        String contentType = "application/octet-stream";
+        String headerValue = "attachment; filename=\"" + media.getFileName() + "\"";
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
+                .body(resource);
+}
+@GetMapping("/find/{filename}")
+public ResponseEntity<FileMetadata> find(@PathVariable("filename") String filename) throws FileNotFoundException
+{
+        FileMetadata got = fileService.findByFileName(filename).orElseThrow();
+
+        return ResponseEntity.ok(got);
+}
+@GetMapping("/findall")
+public ResponseEntity<List<FileMetadata>> all() throws FileNotFoundException
+{
+        List<FileMetadata> got = fileService.findAll();
+
+        return ResponseEntity.ok(got);
 }
 }

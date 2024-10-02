@@ -1,18 +1,15 @@
 package org.product_delivery_backend.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "file_metadata")
 public class FileMetadata {
@@ -21,7 +18,11 @@ public class FileMetadata {
         private UUID id;
         private LocalDateTime ctime;
         private long size;
+
+        @Column(unique = true, name = "file_name")
+        @NotNull
         private String fileName;
+
         private String mimeType;
         private String keyword;
         }
