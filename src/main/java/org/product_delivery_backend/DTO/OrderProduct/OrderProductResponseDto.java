@@ -1,16 +1,21 @@
-package org.product_delivery_backend.dto.cartPrductDto;
+package org.product_delivery_backend.dto.OrderProduct;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.product_delivery_backend.entity.Cart;
 import org.product_delivery_backend.entity.Product;
-import java.math.BigDecimal;
 
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
-public class CartProductResponseDto {
+@Builder
+public class OrderProductResponseDto {
+
     private Long id;
+    private Long orderId;
+    private Long productId;
     private Integer productQuantity;
     private BigDecimal sum;
+
 }

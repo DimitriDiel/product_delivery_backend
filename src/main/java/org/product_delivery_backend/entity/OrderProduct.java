@@ -1,9 +1,11 @@
 package org.product_delivery_backend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,24 +13,19 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
-@Table(name = "cart_products")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class CartProduct {
-
+@Table(name = "order_products")
+public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id", referencedColumnName = "id")
-    @NotNull
-    private Cart cart;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Column(name = "product_quantity")
@@ -39,9 +36,4 @@ public class CartProduct {
     @Digits(integer = 10, fraction = 2, message = "The sum must have up to 10 digits before the decimal point and up to 2 after it.")
     private BigDecimal sum;
 
-    public CartProduct(Cart cart, Product product, Integer productQuantity) {
-        this.cart = cart;
-        this.product = product;
-        this.productQuantity = productQuantity;
-    }
 }

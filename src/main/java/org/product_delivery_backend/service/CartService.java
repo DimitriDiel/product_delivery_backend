@@ -25,12 +25,10 @@ public class CartService {
     private final ProductMapper productMapper;
     private final CartProductMapper cartProductMapper;
     private final UserRepository userRepository;
-    private final CartProductMapper cartItemMapper;
     private final ProductService productService;
-    private final ProductRepository productRepository;
 
     @Transactional
-    public void addProductToCart(Long userId, Long productId) {
+    public CartProductResponseDto addProductToCart(Long userId, Long productId) {
         Optional<Cart> optionalCart = cartRepository.findCartByUserId(userId);
         Cart existCart = optionalCart.orElseGet(() -> createNewCartForUser(userId));
 
@@ -49,7 +47,9 @@ public class CartService {
             existCartProduct.setSum(product.getPrice());  // Изначально сумма равна цене за один продукт
         }
         cartProductRepository.save(existCartProduct);
+        return cartProductMapper.toCartProductResponseDto(existCartProduct);
     }
+
     @Transactional
     public void removeProductFromCart(Long cartId, Long productId) {
         Optional<CartProduct> optionalCartProduct = cartProductRepository.findByCartIdAndProductId(cartId, productId);
@@ -60,9 +60,12 @@ public class CartService {
         }
     }
 
-
-    public List<CartProductResponseDto> getProductsInCart(Long cartId ) {
-
+    public List<CartProductResponseDto> getProductsInCart(Long userId ) {
+        Long cartId = 0L;
+        Optional<Cart> optionalCart = cartRepository.findCartByUserId(userId);
+        if (optionalCart.isPresent()) {
+            cartId = optionalCart.get().getId();
+        }
         List<CartProduct> cartProducts = cartProductRepository.findByCartId(cartId);
         if (cartProducts.isEmpty()) {
             throw new NotFoundException("There are no products in the cart");
@@ -70,8 +73,8 @@ public class CartService {
         return cartProducts.stream()
                 .map(cartProductMapper::toCartProductResponseDto)
                 .toList();
-
     }
+
     @Transactional
     public void clearCart(Long cartId) {
         cartProductRepository.deleteAllByCartId(cartId);
@@ -92,6 +95,11 @@ public class CartService {
             existCartProduct.setSum(product.getPrice().multiply(BigDecimal.valueOf(productQuantity)));
         }
         return cartProductMapper.toCartProductResponseDto(existCartProduct);
+    }
+
+    public Long findCartByUserId(Long userId) {
+        Optional<Cart> optionalCart = cartRepository.findCartByUserId(userId);
+        return optionalCart.map(Cart::getId).orElse(-1L);
     }
 
 

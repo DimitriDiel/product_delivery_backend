@@ -1,5 +1,6 @@
 package org.product_delivery_backend.controller;
 
+import org.apache.coyote.BadRequestException;
 import org.product_delivery_backend.dto.ErrorResponseDto;
 import org.product_delivery_backend.exceptions.*;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ErrorResponseDto> handleValidationException(ValidationException e) {
         return buildErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST, "Validation Error");
+    }
+
+    @ExceptionHandler(OrderException.class)
+    public ResponseEntity<ErrorResponseDto> handleOrderException(OrderException e) {
+        return buildErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST, "OrderStatusError");
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -49,5 +55,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidJwtException.class)
     public ResponseEntity<ErrorResponseDto> handleInvalidJwtException(InvalidJwtException e) {
         return buildErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST, "Invalid JWT Token");
+    }
+
+    @ExceptionHandler(InvalidDataException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidDataException(InvalidDataException e) {
+        return buildErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST, "Invalid Data");
     }
 }
