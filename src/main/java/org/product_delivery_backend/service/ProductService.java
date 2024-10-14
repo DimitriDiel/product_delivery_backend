@@ -2,7 +2,7 @@ package org.product_delivery_backend.service;
 
 import lombok.Data;
 
-import org.product_delivery_backend.dto.productDto.*;
+
 import org.product_delivery_backend.entity.Product;
 import org.product_delivery_backend.exceptions.NotFoundException;
 import org.product_delivery_backend.mapper.ProductMapper;
@@ -21,20 +21,20 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
-    public List<AllProductResponseDto> findAllProduct() {
+    public List<org.product_delivery_backend.dto.productDto.AllProductResponseDto> findAllProduct() {
         List<Product> products = productRepository.findAll();
         return products.stream()
                 .map(productMapper::toAllProductResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    public Page<AllProductResponseDto> findAllProductPage(Pageable pageable) {
+    public Page<org.product_delivery_backend.dto.productDto.AllProductResponseDto> findAllProductPage(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
         return products.map(productMapper::toAllProductResponseDTO);
     }
 
 
-    public ProductResponseDto addProduct(ProductRequestDto productRequestDto) {
+    public org.product_delivery_backend.dto.productDto.ProductResponseDto addProduct(org.product_delivery_backend.dto.productDto.ProductRequestDto productRequestDto) {
         Product product = productMapper.toProduct(productRequestDto);
         Product savedProduct = productRepository.save(product);
         return productMapper.toProductResponseDTO(savedProduct);
@@ -48,12 +48,12 @@ public class ProductService {
         }
     }
 
-    public ProductResponseDto findProductById(Long id) {
+    public org.product_delivery_backend.dto.productDto.ProductResponseDto findProductById(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("This product does not exist"));
         return productMapper.toProductResponseDTO(product);
     }
 
-    public Product findProductById2(Long id) {
+    public Product findProductByIdInCart(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("This product does not exist"));
         return product;
     }
